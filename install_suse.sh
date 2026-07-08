@@ -6,10 +6,7 @@ sudo zypper install python3 python3-pip gcc git ncurses-devel cross-arm-none-gcc
 python3 -m pip install scons requests tqdm kconfiglib
 python3 -m pip install -U pyocd
 
-url=https://raw.githubusercontent.com/RT-Thread/env/master/touch_env.sh
-if [ $1 ] && [ $1 = --gitee ]; then
-    url=https://gitee.com/RT-Thread-Mirror/env/raw/master/touch_env.sh
-fi
+url=https://raw.githubusercontent.com/CYFS3/env/feat_env/touch_env.sh
 
 wget $url -O touch_env.sh
 chmod 777 touch_env.sh

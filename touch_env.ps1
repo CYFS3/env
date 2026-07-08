@@ -1,11 +1,11 @@
 $DEFAULT_RTT_PACKAGE_URL = "https://github.com/RT-Thread/packages.git"
-$ENV_URL = "https://github.com/RT-Thread/env.git"
+$ENV_URL = "https://github.com/CYFS3/env.git"
+$ENV_BRANCH = "feat_env"
 $SDK_URL = "https://github.com/RT-Thread/sdk.git"
 
 if ($args[0] -eq "--gitee") {
     echo "Using gitee service."
     $DEFAULT_RTT_PACKAGE_URL = "https://gitee.com/RT-Thread-Mirror/packages.git"
-    $ENV_URL = "https://gitee.com/RT-Thread-Mirror/env.git"
     $SDK_URL = "https://gitee.com/RT-Thread-Mirror/sdk.git"
 }
 
@@ -28,7 +28,7 @@ if (!(Test-Path -Path $env_dir)) {
     git clone $package_url $env_dir/packages/packages --depth=1
     echo 'source "$PKGS_DIR/packages/Kconfig"' | Out-File -FilePath $env_dir/packages/Kconfig -Encoding ASCII
     git clone $SDK_URL $env_dir/packages/sdk --depth=1
-    git clone $ENV_URL $env_dir/tools/scripts --depth=1
+    git clone --branch $ENV_BRANCH $ENV_URL $env_dir/tools/scripts --depth=1
     copy $env_dir/tools/scripts/env.ps1 $env_dir/env.ps1
 } else {
     echo ".env folder has exsited. Jump this step."

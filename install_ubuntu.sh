@@ -4,10 +4,7 @@ sudo apt-get update
 sudo apt-get -qq install python3 python3-pip gcc git libncurses5-dev -y
 pip install scons requests tqdm kconfiglib pyyaml
 
-url=https://raw.githubusercontent.com/RT-Thread/env/master/touch_env.sh
-if [ $1 ] && [ $1 = --gitee ]; then
-    url=https://gitee.com/RT-Thread-Mirror/env/raw/master/touch_env.sh
-fi
+url=https://raw.githubusercontent.com/CYFS3/env/feat_env/touch_env.sh
 
 wget $url -O touch_env.sh
 chmod 777 touch_env.sh

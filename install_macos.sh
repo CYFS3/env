@@ -66,10 +66,7 @@ if ! [ -x "$(command -v arm-none-eabi-gcc)" ]; then
     brew install gnu-arm-embedded
 fi
 
-url=https://raw.githubusercontent.com/RT-Thread/env/master/touch_env.sh
-if [ $1 ] && [ $1 = --gitee ]; then
-    url=https://gitee.com/RT-Thread-Mirror/env/raw/master/touch_env.sh
-fi
+url=https://raw.githubusercontent.com/CYFS3/env/feat_env/touch_env.sh
 curl $url -o touch_env.sh
 chmod 777 touch_env.sh
 ./touch_env.sh $@
