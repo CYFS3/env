@@ -12,7 +12,7 @@ from env_paths import get_env_root
 
 CLANG_FORMAT_VERSION = '22.1.8'
 EXTENSIONS = {'.c', '.h', '.cc', '.hh', '.cpp', '.hpp', '.cxx', '.hxx', '.c++', '.h++', '.inl', '.ipp', '.tpp'}
-DIFF_OPTIONS = ['--name-only', '-z', '--diff-filter=ACMR', '--no-ext-diff', '--ignore-submodules=all']
+DIFF_OPTIONS = ['--name-only', '-z', '--diff-filter=ACMRT', '--no-ext-diff', '--ignore-submodules=all']
 
 
 class CommandError(Exception):
@@ -32,6 +32,7 @@ def filenames(data):
 
 def changed_files(root, base):
     symlinks = set()
+    submodules = set()
     for entry in git('ls-files', '--stage', '-z', cwd=root).split(b'\0'):
         if not entry:
             continue
@@ -41,6 +42,8 @@ def changed_files(root, base):
             raise CommandError('Resolve merge conflicts before running format-changed.')
         if mode == b'120000':
             symlinks.add(os.fsdecode(name))
+        elif mode == b'160000':
+            submodules.add(os.fsdecode(name))
 
     names = filenames(git('diff', *DIFF_OPTIONS, '--', cwd=root))
     names.update(filenames(git('diff', '--cached', *DIFF_OPTIONS, '--', cwd=root)))
@@ -53,6 +56,9 @@ def changed_files(root, base):
 
     selected = []
     for name in sorted(names - symlinks):
+        # Historical diffs can name files now owned by a submodule in the index.
+        if any(name == submodule or name.startswith(submodule + '/') for submodule in submodules):
+            continue
         path = root / name
         if path.suffix.lower() not in EXTENSIONS or not path.is_file() or path.is_symlink():
             continue
